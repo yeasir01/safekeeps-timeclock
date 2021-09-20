@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: PostgresContainer
+    image: postgres:13.4
+    restart: always
+    env_file: 
+      - ./env/postgres-db.env
+    volumes: 
+      - data:/var/lib/postgresql/data
+    ports: 
+      - 5432:5432
+    networks: 
+      - db-network
+
+  pg-admin:
+    container_name: PGAdminContainer
+    image: dpage/pgadmin4:5.7
+    restart: always
+    env_file: 
+      - ./env/pg-admin.env
+    volumes: 
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks: 
+      - db-network
+
+  api-server:
+    container_name: APIServerContainer
+    restart: always
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    env_file: 
+      - ./env/api-server.env
+      - ./env/postgres-db.env
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    networks: 
+      - db-network
+
+  client:
+    container_name: ReactContainer
+    restart: always
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    env_file: 
+      - ./env/ngnix-client.env
+    ports:
+      - 3000:3000
+    depends_on:
+      - api-server
+
+networks: 
+  db-network:
+    driver: bridge
+
+volumes:
+  data:
+  pgadmin:
