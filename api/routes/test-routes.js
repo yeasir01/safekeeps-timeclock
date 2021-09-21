@@ -5,10 +5,7 @@ const test = require('../controllers/test-controllers.js');
 router.route('/')
     .get(test.server);
 
-router.route('/testdb')
+router.route('/db')
     .get(test.database);
-
-router.route('*')
-    .get(test.noRoute);
-
+    
 module.exports = router;

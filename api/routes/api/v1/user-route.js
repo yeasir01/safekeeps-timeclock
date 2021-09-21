@@ -3,11 +3,11 @@ const router = express.Router();
 const user = require('../../../controllers/user-controllers.js');
 
 router.route('/user')
-    .post(user.create)
+    .post(user.create);
 
 router.route('/user/:id')
     .get(user.get)
     .delete(user.delete)
-    .put(user.update)
+    .put(user.update);
 
 module.exports = router;

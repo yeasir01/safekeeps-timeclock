@@ -1,18 +1,16 @@
-const db = require('../models/index.js');
+const { sequelize } = require('../models/index.js');
 
 module.exports = {
     database: async (_req, res) => {
         try {
-            await db.sequelize.authunticate();
-            res.json({status: "OK", code: 200});
-        } catch (error) {
-            res.json({message: "Unable to connect to DB.", code: 500});
+            await sequelize.authenticate();
+            res.status(200).json({status: 'OK'});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: 'Unable to connect to DB.'});
         }
     },
     server: (_req, res) => {
-        res.json({status: "OK", code: 200});
-    },
-    noRoute: (_req, res) => {
-        res.json({message: "No resource found", code: 404})
+        res.status(200).json({status: 'OK'});
     }
-}
+};

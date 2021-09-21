@@ -8,7 +8,7 @@ services:
     env_file: 
       - ./env/postgres-db.env
     volumes: 
-      - data:/var/lib/postgresql/data
+      - postgresdata:/var/lib/postgresql/data
     ports: 
       - 5432:5432
     networks: 
@@ -63,5 +63,5 @@ networks:
     driver: bridge
 
 volumes:
-  data:
+  postgresdata:
   pgadmin:

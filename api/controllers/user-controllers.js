@@ -4,9 +4,9 @@ module.exports = {
     create: async (req, res) => {
         try {
             const user = await User.create(req.body);
-            res.json({user: user, code: 201});
+            res.status(201).json({message: 'The user was created.', user: user});
         } catch (error) {
-            res.json({message: "An error occured", code: 500});
+            res.status(500).json({message: 'An error occured'});
         }
     },
     update: (_req, res) => {
@@ -19,9 +19,9 @@ module.exports = {
         try {
             const id = req.params.id;
             const user = await User.findByPk(id);
-            res.json({user: user, code: 200});
+            res.status(201).json({user: user});
         } catch (error) {
-            res.json({message: "An error occured", code: 500});
+            res.status(500).json({message: 'An error occurred, while attempting to create a user.'});
         }
     },
 }
