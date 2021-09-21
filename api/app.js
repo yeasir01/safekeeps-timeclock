@@ -23,7 +23,7 @@ app.use((err, _req, res, _next) => {
 
 (async () => {
     try {
-        await sequelize.sync(/* { force: true } */);
+        await sequelize.sync({ force: true });
         app.listen(PORT, () => console.log(`API Server listening on ${PORT}`));
     } catch (err) {
         console.log(err);

@@ -11,8 +11,20 @@ module.exports = (sequelize, DataTypes) => {
     User.init({
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
+            defaultValue: DataTypes.OBJECT,
             primaryKey: true
+        },
+        app_metadata: {
+            type: DataTypes.JSON,
+        },
+        blocked: {
+            type: DataTypes.BOOLEAN,
+        },
+        email: {
+            type: DataTypes.STRING,
+        },
+        email_verified: {
+            type: DataTypes.BOOLEAN,
         },
         first_name: {
             type: DataTypes.STRING,
@@ -21,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         last_name: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        user_metadata: {
+            type: DataTypes.JSON,
         },
     }, {
         sequelize,

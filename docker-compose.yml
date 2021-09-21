@@ -8,11 +8,11 @@ services:
     env_file: 
       - ./env/postgres-db.env
     volumes: 
-      - postgresdata:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
     ports: 
       - 5432:5432
     networks: 
-      - db-network
+      - back-tier
 
   pg-admin:
     container_name: PGAdminContainer
@@ -27,7 +27,7 @@ services:
     depends_on:
       - db
     networks: 
-      - db-network
+      - back-tier
 
   api-server:
     container_name: APIServerContainer
@@ -38,12 +38,15 @@ services:
     env_file: 
       - ./env/api-server.env
       - ./env/postgres-db.env
+    expose:
+      - 5000
     ports:
       - 5000:5000
     depends_on:
       - db
     networks: 
-      - db-network
+      - back-tier
+      - front-tier
 
   client:
     container_name: ReactContainer
@@ -53,15 +56,23 @@ services:
       dockerfile: Dockerfile
     env_file: 
       - ./env/ngnix-client.env
+    expose:
+      - 3000
     ports:
       - 3000:3000
     depends_on:
       - api-server
+    networks: 
+      - front-tier
 
 networks: 
-  db-network:
+  back-tier:
+    driver: bridge
+  front-tier:
     driver: bridge
 
 volumes:
-  postgresdata:
+  dbdata:
+    driver: local
   pgadmin:
+    driver: local
