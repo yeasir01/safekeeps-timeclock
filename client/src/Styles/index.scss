@@ -1,0 +1,49 @@
+$border-color: #d9dbdb;
+$success-color: #2ecc71;
+$failure-color: #e74c3c;
+
+.large-clock {
+    font-size: 3rem;
+    color: slategray;
+}
+
+.user-list {
+
+    &__container {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid $border-color;
+        margin: 10px 0;
+        gap: 8px;
+    }
+
+    &__avatar {
+        position: relative;
+        height: 50px;
+        width: 50px;
+        
+        & img {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        & .status-circle[data-status=active] {
+            overflow: auto;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            height: 10px;
+            width: 10px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            background-color: $success-color;
+        }
+    }
+
+    &__name {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 22px;
+        flex-grow: 1;
+    }
+}

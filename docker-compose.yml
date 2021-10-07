@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    container_name: PostgresContainer
+    container_name: Postgres-Container
     image: postgres:13.4
     restart: always
     env_file: 
@@ -12,10 +12,10 @@ services:
     ports: 
       - 5432:5432
     networks: 
-      - back-tier
+      - private-network
 
   pg-admin:
-    container_name: PGAdminContainer
+    container_name: PG-Admin-Container
     image: dpage/pgadmin4:5.7
     restart: always
     env_file: 
@@ -27,10 +27,10 @@ services:
     depends_on:
       - db
     networks: 
-      - back-tier
+      - private-network
 
   api-server:
-    container_name: APIServerContainer
+    container_name: API-Server-Container
     restart: always
     build: 
       context: ./api
@@ -43,11 +43,11 @@ services:
     depends_on:
       - db
     networks: 
-      - back-tier
-      - front-tier
+      - private-network
+      - public-network
 
   client:
-    container_name: ReactContainer
+    container_name: React-Container
     restart: always
     build: 
       context: ./client
@@ -57,12 +57,12 @@ services:
     depends_on:
       - api-server
     networks: 
-      - front-tier
+      - public-network
 
 networks: 
-  back-tier:
+  private-network:
     driver: bridge
-  front-tier:
+  public-network:
     driver: bridge
 
 volumes:
