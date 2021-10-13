@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2 - Serve static files using NGINX
-FROM nginx:alpine:latest
+FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 COPY --from=build /usr/src/app/build .

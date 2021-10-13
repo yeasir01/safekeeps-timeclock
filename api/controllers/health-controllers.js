@@ -4,13 +4,13 @@ module.exports = {
     database: async (_req, res) => {
         try {
             await sequelize.authenticate();
-            res.status(200).json({status: 'OK', message: 'Database ready to connect.'});
+            res.status(200).json({success: true, message: 'Database ready to connect.'});
         } catch (err) {
             console.log(err);
-            res.status(500).json({message: 'Unable to connect to DB.'});
+            res.status(500).json({success: false, message: 'Unable to connect to DB.'});
         }
     },
     server: (_req, res) => {
-        res.status(200).json({status: 'OK', message: 'Server running.'});
+        res.status(200).json({success: true, message: 'Server running.'});
     }
 };

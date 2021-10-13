@@ -8,7 +8,7 @@ services:
     env_file: 
       - ./env/postgres-db.env
     volumes: 
-      - dbdata:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     ports: 
       - 5432:5432
     networks: 
@@ -21,7 +21,7 @@ services:
     env_file: 
       - ./env/pg-admin.env
     volumes: 
-      - pgadmin:/var/lib/pgadmin
+      - pg-admin:/var/lib/pgadmin
     ports:
       - 8080:8080
     depends_on:
@@ -35,9 +35,9 @@ services:
     build: 
       context: ./api
       dockerfile: Dockerfile
-    env_file: 
-      - ./env/api-server.env
-      - ./env/postgres-db.env
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
     ports:
       - 5000:5000
     depends_on:
@@ -66,7 +66,7 @@ networks:
     driver: bridge
 
 volumes:
-  dbdata:
+  db-data:
     driver: local
-  pgadmin:
+  pg-admin:
     driver: local

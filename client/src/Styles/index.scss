@@ -1,10 +1,22 @@
-$border-color: #d9dbdb;
+$border-color: #e3e6e8;
 $success-color: #2ecc71;
 $failure-color: #e74c3c;
+$warn-color: #f1c40f;
+$light-blue: #3498db;
+$dark-blue: #2980b9;
+$darker-blue: #2c3e50;
+$silver: #bdc3c7;
+
+@import 'animations';
+
+* {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: $darker-blue;
+}
 
 .large-clock {
     font-size: 3rem;
-    color: slategray;
+    color: $darker-blue;
 }
 
 .user-list {
@@ -28,7 +40,7 @@ $failure-color: #e74c3c;
             border-radius: 50%;
         }
 
-        & .status-circle[data-status=active] {
+        & .status-circle {
             overflow: auto;
             position: absolute;
             bottom: 0;
@@ -37,13 +49,52 @@ $failure-color: #e74c3c;
             width: 10px;
             border: 2px solid #fff;
             border-radius: 50%;
+            background-color: $failure-color;
+        }
+
+        & .status-circle[data-status=active] {
             background-color: $success-color;
+        }
+
+        & .status-circle[data-status=lunch] {
+            background-color: $warn-color;
         }
     }
 
     &__name {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 22px;
+        font-size: 1.3rem;
         flex-grow: 1;
+    }
+}
+
+.pin-pad {
+
+    &__row {
+        display: flex;
+        grid-gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    &__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+        border: 1px solid $silver;
+        transition: 75ms ease-in-out;
+        cursor: pointer;
+    }
+
+    &__btn:hover {
+        background: $dark-blue;
+        color: #fff;
+    }
+
+    &__btn:active {
+        background: $light-blue;
+        color: #fff;
     }
 }
