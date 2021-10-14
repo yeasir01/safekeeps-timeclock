@@ -2,52 +2,44 @@ version: "3.9"
 
 services:
   db:
-    container_name: Postgres-Container
+    container_name: postgres-container
     image: postgres:13.4
     restart: always
-    env_file: 
-      - ./env/postgres-db.env
     volumes: 
       - db-data:/var/lib/postgresql/data
-    ports: 
-      - 5432:5432
     networks: 
-      - private-network
+      - internal-network
 
   pg-admin:
-    container_name: PG-Admin-Container
-    image: dpage/pgadmin4:5.7
+    container_name: pg-admin-container
+    image: dpage/pgadmin4:6.0
     restart: always
-    env_file: 
-      - ./env/pg-admin.env
-    volumes: 
+    volumes:
       - pg-admin:/var/lib/pgadmin
     ports:
       - 8080:8080
     depends_on:
       - db
     networks: 
-      - private-network
+      - internal-network
 
   api-server:
-    container_name: API-Server-Container
+    container_name: api-server-container
     restart: always
     build: 
       context: ./api
       dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
-      - PORT=5000
     ports:
       - 5000:5000
     depends_on:
       - db
     networks: 
-      - private-network
-      - public-network
+      - internal-network
 
   client:
-    container_name: React-Container
+    container_name: react-container
     restart: always
     build: 
       context: ./client
@@ -56,13 +48,9 @@ services:
       - 80:80
     depends_on:
       - api-server
-    networks: 
-      - public-network
 
 networks: 
-  private-network:
-    driver: bridge
-  public-network:
+  internal-network:
     driver: bridge
 
 volumes:
