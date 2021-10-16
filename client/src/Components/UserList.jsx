@@ -1,3 +1,5 @@
+import defaultUsr from '../Assets/img/default-user-image.png';
+
 export default function UserList({users = []}) {
 
     return (
@@ -6,7 +8,7 @@ export default function UserList({users = []}) {
                 <div className="user-list__container" key={user.id}>
                     <div className="user-list__avatar">
                         <div className="status-circle" data-status={user.status}></div>
-                        <img src={user.img} alt={user.name} />
+                        <img src={user.img ? user.img : defaultUsr} alt={user.name} />
                     </div>
                     <div className="user-list__name">
                         <p>{user.name}</p>

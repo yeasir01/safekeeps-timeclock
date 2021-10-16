@@ -1,9 +1,8 @@
 # dependencies
+docker-compose.override.yml
 node_modules*
-/data
-/pgadmin
+data
 *.env
-*.override.yml
 
 # testing
 /coverage

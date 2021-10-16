@@ -1,4 +1,10 @@
 node_modules
-Dockerfile
-.gitignore
-*.log
+test
+Dockerfile.prod
+Dockerfile.dev
+.eslintrc.js
+*.git
+*.env
+*.gitignore
+*.dockerignore
+*.md

@@ -68,17 +68,15 @@ $silver: #bdc3c7;
 }
 
 .pin-pad {
+    width: fit-content;
 
     &__row {
-        display: flex;
-        grid-gap: 10px;
-        margin-bottom: 10px;
+        width: fit-content;
     }
 
     &__btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: inline-block;
+        margin: 5px;
         font-size: 2rem;
         height: 4rem;
         width: 4rem;

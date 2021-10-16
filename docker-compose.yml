@@ -2,8 +2,10 @@ version: "3.9"
 
 services:
   db:
-    container_name: postgres-container
+    container_name: postgres-db
     image: postgres:13.4
+    labels: 
+      - some:test
     restart: always
     volumes: 
       - db-data:/var/lib/postgresql/data
@@ -11,7 +13,7 @@ services:
       - internal-network
 
   pg-admin:
-    container_name: pg-admin-container
+    container_name: pg-admin
     image: dpage/pgadmin4:6.0
     restart: always
     volumes:
@@ -24,26 +26,32 @@ services:
       - internal-network
 
   api-server:
-    container_name: api-server-container
+    container_name: api-server
     restart: always
     build: 
       context: ./api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     environment:
       - NODE_ENV=production
+      - PORT=5000
     ports:
       - 5000:5000
+    healthcheck:
+      test: node healthcheck.js
+      interval: 1m
+      timeout: 10s
+      retries: 3
     depends_on:
       - db
     networks: 
       - internal-network
 
   client:
-    container_name: react-container
+    container_name: react-app
     restart: always
     build: 
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
       - 80:80
     depends_on:
