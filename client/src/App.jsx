@@ -32,8 +32,8 @@ export default function App() {
           <UserList users={list}/>
       </header>
     </div>
-  ); */
-
+  );
+*/
   return (
     <div>
       <PinPad />
