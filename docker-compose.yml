@@ -37,8 +37,8 @@ services:
     ports:
       - 5000:5000
     healthcheck:
-      test: node healthcheck.js
-      interval: 1m
+      test: node ./config/healthcheck.js
+      interval: 2m
       timeout: 10s
       retries: 3
     depends_on:

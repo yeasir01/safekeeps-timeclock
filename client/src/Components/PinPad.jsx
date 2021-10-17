@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function PinPad() {
 
-    const [pin, setPin] = useState("");
+    const [pin, setPin] = useState('');
 
     const handleClick = (event) => {
         const current = event.target.value;
@@ -10,16 +10,43 @@ export default function PinPad() {
         if (current === 'clear') {
             return setPin('');
         }
+
         setPin(prv => prv + event.target.value)
     }
+
+    useEffect(() => {
+        if (pin.length >= 4) {
+            const correct = "1234";
+            console.clear()
+            let timeout;
+            
+            if (pin === correct) {
+                timeout = setTimeout(()=>{
+                    setPin('');
+                    console.log('Welcome User ;-)')
+                }, 500)
+                
+                return
+            }
+
+            setPin('');
+            console.log("Wrong PIN Try again :-(")
+
+            return () => clearTimeout(timeout);
+        }
+    }, [pin])
 
     return (
         <div className="pin-pad">
             <div className="pin-pad__row">
-                Enter Pin
+                <p>Enter your PIN</p>
             </div>
             <div className="pin-pad__row">
-                <input type="password" name="pin" id="pin" value={pin} />
+                <div className="pin-pad__preview">
+                    {pin.split('').map(( _ , idx) => (
+                        <div className="dot" key={idx}></div>
+                    ))}
+                </div>
             </div>
             <div className="pin-pad__row">
                 <button onClick={handleClick} className="pin-pad__btn" value='1'>1</button>

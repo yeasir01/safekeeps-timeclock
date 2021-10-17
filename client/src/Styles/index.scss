@@ -7,11 +7,15 @@ $dark-blue: #2980b9;
 $darker-blue: #2c3e50;
 $silver: #bdc3c7;
 
+@import 'montserrat-font';
 @import 'animations';
 
 * {
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif;
     color: $darker-blue;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .large-clock {
@@ -70,18 +74,44 @@ $silver: #bdc3c7;
 .pin-pad {
     width: fit-content;
     margin: auto;
-    padding: 10px;
+    padding: 30px;
 
     &__row {
-        width: fit-content;
+        width: 100%;
+    }
+    
+    &__row p {
+        display: block;
+        text-align: center;
+        line-height: 1;
+        font-size: 1.5rem;
+    }
+
+    &__preview {
+        width: 100%;
+        min-height: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+
+        .dot {
+            display: inline-block;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: $success-color;
+            border-radius: 50%;
+            animation: growFadeIn 80ms linear;
+        }
     }
 
     &__btn {
         display: inline-block;
+        background-color: #fff;
         margin: 5px;
         font-size: 2rem;
-        height: 4rem;
-        width: 4rem;
+        height: 5rem;
+        width: 5rem;
         border-radius: 50%;
         border: 1px solid $silver;
         transition: 75ms ease-in-out;
@@ -96,5 +126,8 @@ $silver: #bdc3c7;
     &__btn:active {
         background: $light-blue;
         color: #fff;
+        animation-name: growOutIn;
+        animation-duration: 300ms;
+        animation-timing-function: linear;
     }
 }
