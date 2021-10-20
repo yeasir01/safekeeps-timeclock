@@ -7,30 +7,20 @@ $dark-blue: #2980b9;
 $darker-blue: #2c3e50;
 $silver: #bdc3c7;
 
-@import 'montserrat-font';
+@import 'fonts';
 @import 'animations';
-
-* {
-    font-family: 'Montserrat', Arial, sans-serif;
-    color: $darker-blue;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-.large-clock {
-    font-size: 3rem;
-    color: $darker-blue;
-}
+@import 'reset';
+@import 'layout';
 
 .user-list {
+    height: 100%;
 
     &__container {
         display: flex;
         align-items: center;
         border-bottom: 1px solid $border-color;
-        margin: 10px 0;
-        gap: 8px;
+        padding: 10px;
+        gap: 10px;
     }
 
     &__avatar {
@@ -45,12 +35,11 @@ $silver: #bdc3c7;
         }
 
         & .status-circle {
-            overflow: auto;
             position: absolute;
             bottom: 0;
             right: 0;
-            height: 10px;
-            width: 10px;
+            height: 12px;
+            width: 12px;
             border: 2px solid #fff;
             border-radius: 50%;
             background-color: $failure-color;
@@ -66,8 +55,7 @@ $silver: #bdc3c7;
     }
 
     &__name {
-        font-size: 1.3rem;
-        flex-grow: 1;
+        font-size: 1.2rem;
     }
 }
 

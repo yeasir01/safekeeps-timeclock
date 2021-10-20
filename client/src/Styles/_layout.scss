@@ -1,0 +1,68 @@
+.kiosk {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "top-left top-right"
+        "center-left bottom-right"
+        "bottom-left bottom-right";
+    overflow: hidden;
+
+    &__top-left {
+        grid-area: top-left;
+        background-color: $light-blue;
+        padding: 15px;
+
+        .logo {
+            height: 35px;
+            width: auto;
+        }
+    }
+
+    &__top-right {
+        grid-area: top-right;
+        padding: 10px;
+    }
+
+    &__center-left {
+        grid-area: center-left;
+        display: flex;
+        align-items: center;
+        background-color: $light-blue;
+    }
+
+    &__bottom-right {
+        grid-area: bottom-right;
+        overflow-y: auto;
+    }
+    
+    &__bottom-left {
+        grid-area: bottom-left;
+        background-color: $light-blue;
+        padding: 15px;
+        color: #fff;
+    }
+
+    &__clock {
+        font-size: 4.5rem;
+        padding: 15px;
+        color: #fff;
+    }
+
+    &__search {
+        display: inline-block;
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        background-color: #ededed;
+        border: 1px solid $border-color;
+
+        &:focus {
+            outline: 1px solid $silver;
+            background-color: #fff;
+        }
+
+    }
+}
