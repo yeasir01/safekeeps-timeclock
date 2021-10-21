@@ -4,8 +4,6 @@ services:
   db:
     container_name: postgres-db
     image: postgres:13.4
-    labels: 
-      - some:test
     restart: always
     volumes: 
       - db-data:/var/lib/postgresql/data

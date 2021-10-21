@@ -5,9 +5,9 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
-        "top-left top-right"
-        "center-left bottom-right"
-        "bottom-left bottom-right";
+        "top-left right"
+        "center-left right"
+        "bottom-left right";
     overflow: hidden;
 
     &__top-left {
@@ -21,11 +21,6 @@
         }
     }
 
-    &__top-right {
-        grid-area: top-right;
-        padding: 10px;
-    }
-
     &__center-left {
         grid-area: center-left;
         display: flex;
@@ -33,8 +28,8 @@
         background-color: $light-blue;
     }
 
-    &__bottom-right {
-        grid-area: bottom-right;
+    &__right {
+        grid-area: right;
         overflow-y: auto;
     }
     
@@ -49,20 +44,7 @@
         font-size: 4.5rem;
         padding: 15px;
         color: #fff;
+        opacity: .8;
     }
 
-    &__search {
-        display: inline-block;
-        width: 100%;
-        padding: 8px;
-        font-size: 1rem;
-        background-color: #ededed;
-        border: 1px solid $border-color;
-
-        &:focus {
-            outline: 1px solid $silver;
-            background-color: #fff;
-        }
-
-    }
 }
