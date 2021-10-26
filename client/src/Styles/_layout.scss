@@ -3,48 +3,51 @@
     width: 100vw;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-        "top-left right"
-        "center-left right"
-        "bottom-left right";
+    grid-template-rows: 1fr;
+    grid-template-areas: "left right";
     overflow: hidden;
 
-    &__top-left {
-        grid-area: top-left;
+    &__left {
+        grid-area: left;
         background-color: $light-blue;
         padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    &__logo{
+        padding: 15px;
 
-        .logo {
-            height: 35px;
+        img{
+            height: 38px;
             width: auto;
+
+        }
+    }
+    
+    &__clock {
+        padding: 15px;
+        color: #fff;
+        
+        .date {
+            font-size: 2rem;
+            opacity: .8;
+        }
+        
+        .clock {
+            font-size: 4.5rem;
+            opacity: 1;
         }
     }
 
-    &__center-left {
-        grid-area: center-left;
-        display: flex;
-        align-items: center;
-        background-color: $light-blue;
+    &__company {
+        padding: 15px;
+        color: #fff;
     }
 
     &__right {
         grid-area: right;
         overflow-y: auto;
     }
-    
-    &__bottom-left {
-        grid-area: bottom-left;
-        background-color: $light-blue;
-        padding: 15px;
-        color: #fff;
-    }
-
-    &__clock {
-        font-size: 4.5rem;
-        padding: 15px;
-        color: #fff;
-        opacity: .8;
-    }
-
 }

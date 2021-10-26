@@ -2,30 +2,38 @@ import UserList from "../Components/UserList";
 import DigitalClock from "../Components/DigitalClock"
 import PinPad from "../Components/PinPad"
 import logo from "../Assets/img/safekeep_logo_light.png";
-import {Switch, Route} from 'react-router-dom';
+import { useState } from "react";
+
+const INTIAL_USER_STATE = {
+  id: "",
+  pin: "",
+  name: "",
+}
 
 export default function Kiosk() {
+  const [user, setUser] = useState(INTIAL_USER_STATE);
+  const [showPin, setShowPin] = useState(false);
+
+  const handleSelect = (event) => {
+    const userID = event.currentTarget.getAttribute("data-id");
+    const userName = event.currentTarget.getAttribute("data-name");
+    setUser({ ...user, id: userID, name: userName });
+    setShowPin(true);
+  }
 
   return (
     <div className="kiosk">
-      <div className="kiosk__top-left">
-        <img src={logo} alt="company logo" className="logo" />
-      </div>
-      <div className="kiosk__center-left">
-        <DigitalClock classes="kiosk__clock" />
+      <div className="kiosk__left">
+        <div className="kiosk__logo">
+          <img src={logo} alt="company logo" />
+        </div>
+        <DigitalClock classes="kiosk__clock" includeDate={true} />
+        <div className="kiosk__company">
+          <p>Johnson & Johnsons Co.</p>
+        </div>
       </div>
       <div className="kiosk__right">
-        <Switch>
-          <Route exact path="/">
-            <UserList />
-          </Route>
-          <Route path="/pin">
-            <PinPad />
-          </Route>
-        </Switch>
-      </div>
-      <div className="kiosk__bottom-left">
-        <h3>Johnson & Johnsons Co.</h3>
+        {showPin ? <PinPad user={user}/> : <UserList handleSelect={handleSelect} />}
       </div>
     </div>
   )

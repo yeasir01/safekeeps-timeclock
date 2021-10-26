@@ -88,6 +88,15 @@ $silver: #bdc3c7;
     align-items: center;
     flex-direction: column;
 
+    &__message {
+        text-align: center;
+
+        p:first-child{
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+    }
+
     &__row {
         width: 100%;
         display: flex;

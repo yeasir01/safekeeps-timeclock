@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function PinPad() {
+export default function PinPad({user}) {
 
     const [pin, setPin] = useState('');
 
@@ -38,8 +38,9 @@ export default function PinPad() {
 
     return (
         <div className="pin-pad">
-            <div className="pin-pad__row">
-                <p>Enter your PIN</p>
+            <div className="pin-pad__message">
+                <p>Hi, {user.name}</p>
+                <p>Please Enter your 4-Digit PIN</p>
             </div>
             <div className="pin-pad__row">
                 <div className="pin-pad__preview">

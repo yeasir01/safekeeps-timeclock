@@ -17,6 +17,7 @@ const request = http.request(options, (res) => {
     }
 });
 
+// eslint-disable-next-line no-unused-vars
 request.on('error', function(_err) {  
     console.log('ERROR');
     process.exit(1);
