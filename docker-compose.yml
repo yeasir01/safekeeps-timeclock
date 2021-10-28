@@ -1,30 +1,29 @@
 version: "3.9"
 
 services:
-  db:
-    container_name: postgres-db
-    image: postgres:13.4
+  mongo:
+    container_name: mongo
+    image: mongo:5.0.3-focal
     restart: always
     volumes: 
-      - db-data:/var/lib/postgresql/data
+      - db-data:/data/db
     networks: 
-      - internal-network
+      - db-network
 
-  pg-admin:
-    container_name: pg-admin
-    image: dpage/pgadmin4:6.0
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express:1.0.0-alpha
     restart: always
-    volumes:
-      - pg-admin:/var/lib/pgadmin
     ports:
-      - 8080:8080
+      - 8081:8081
     depends_on:
-      - db
+      - mongo
     networks: 
-      - internal-network
+      - db-network
 
   api-server:
     container_name: api-server
+    image: safekeeps-api:latest
     restart: always
     build: 
       context: ./api
@@ -35,17 +34,18 @@ services:
     ports:
       - 5000:5000
     healthcheck:
-      test: node ./services/healthcheck.js
+      test: node ./utils/healthcheck.js
       interval: 2m
       timeout: 10s
       retries: 3
     depends_on:
-      - db
+      - mongo
     networks: 
-      - internal-network
+      - db-network
 
   client:
     container_name: react-app
+    image: safekeeps-react-app:latest
     restart: always
     build: 
       context: ./client
@@ -56,11 +56,11 @@ services:
       - api-server
 
 networks: 
-  internal-network:
+  db-network:
     driver: bridge
 
 volumes:
   db-data:
     driver: local
-  pg-admin:
+  db-admin:
     driver: local

@@ -1,41 +1,42 @@
 'use strict';
 
 const express = require('express');
-const {sequelize} = require('./models/index.js');
+const mongoose = require('mongoose');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
-app.use(express.urlencoded({
-    extended: true
-}));
+const MONGO_URI = process.env.MONGO_URI;
+
+const MONOGO_OPT = {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    dbName: 'safeKeeps',
+};
+
+//Middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/', require('./routes/health-check.js'));
+//DB Connection
+mongoose.connect(MONGO_URI, MONOGO_OPT, (err) => console.log(err));
+
+// Health check route
+app.get('/healthy', (req, res) => {
+    res.status(200).send('OK').end();
+});
+
+//Api Routes
 app.use('/api/v1', require('./routes/v1/user-route.js'));
 
-app.use('*', require('./routes/no-resource.js'));
+//404
+app.get('*', (req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'No resource found',
+        url: req.originalUrl
+    }).end();
+});
 
-let server = null;
-
-(async () => {
-    try {
-        await sequelize.sync({
-            force: true
-        });
-        server = app.listen(PORT, () => console.log(`API Server listening on ${PORT}`));
-    } catch (err) {
-        console.info(err);
-    }
-})();
-
-async function gracefulShutDown() {
-    try {
-        await server.close();
-        process.exit(0);
-    } catch (_) {
-        process.exit(1);
-    }
-}
-
-process.on('SIGINT', gracefulShutDown);
+//Start server
+app.listen(PORT, () => console.log(`API Server listening on ${PORT}`));
