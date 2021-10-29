@@ -4,7 +4,7 @@ import Kiosk from './Views/Kiosk';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 export default function App() {
-
+  
   return (
     <React.Fragment>
       <Router>
