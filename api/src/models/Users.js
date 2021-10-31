@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const { hashPassword } = require('../middleware/password-hash');
 
 var UserSchema = mongoose.Schema({
     app_metadata: {
@@ -59,32 +59,15 @@ var UserSchema = mongoose.Schema({
         type: String,
         require: true,
         select: false
+    },
+    reset_token: {
+        type: String,
+        require: false,
+        default: null
     }
 }, {
     timestamps: true
 });
 
-UserSchema.pre('save', function(next) {
-    var user = this;
-
-    if (!user.isModified('password')) return next();
-
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) return next(err);
-
-        bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) return next(err);
-            user.password = hash;
-            next();
-        });
-    });
-});
-     
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if (err) return cb(err);
-        cb(null, isMatch);
-    });
-};
-
+UserSchema.pre('save', hashPassword);
 module.exports = mongoose.model('User', UserSchema);

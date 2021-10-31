@@ -17,3 +17,9 @@ module.exports.loginSchema = yup.object({
         password: yup.string().required(),
     })
 });
+
+module.exports.forgotSchema = yup.object({
+    body: yup.object({
+        email: yup.string().email(),
+    })
+});

@@ -1,4 +1,6 @@
 const User = require('../models/Users');
+const { comparePassword } = require('../helpers/compare-password');
+const { serializeUrlToken } = require('../helpers/gen-url-token');
 
 module.exports = {
     register: async (req, res, next) => {
@@ -27,37 +29,63 @@ module.exports = {
         try {
             const { email, password } = req.body;
             const user = await User.findOne({ email }).select('+password');
+            const isPassword = await comparePassword(password, user.password);
 
             if (!user) {
-                return res.status(409).json({
+                return res.status(403).json({
                     success: false, 
                     message: 'Invalid credentials.'
                 });
             }
 
             if (user.blocked) {
-                return res.status(409).json({
+                return res.status(403).json({
                     success: false, 
                     message: 'This account has been blocked, please contact support.'
                 });
             }
 
-            user.comparePassword(password, (err, isMatch) => {
-                if (err) {
-                    return res.status(403).json({success: false,});
-                }
+            if (!isPassword) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Invalid credientials.'
+                });
+            }
 
-                if (isMatch) {
-                    return res.status(200).json({
-                        success: true, 
-                        message: 'Welcome' + user.first_name
-                    });
-                }
-                throw new Error('Error thrown in compare password method');
+            return res.status(200).json({
+                success: true,
+                message: 'Welcome ' + user.first_name
             });
 
         } catch (err) {
             next(err);
         }
-    }
+    },
+    forgot: async (req, res, next) => {
+        try {
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            const expiry = 60 * 60;
+            
+            if (!user) {
+                return res.status(404).json({
+                    success: false, 
+                    message: `${email} was not found.`
+                });
+            }
+
+            const token = await serializeUrlToken(40, expiry);
+
+            user.reset_token = token;
+            user.save();
+
+            return res.status(200).json({
+                success: true, 
+                message: 'Please check your email for the reset link.'
+            });
+
+        } catch (err) {
+            next(err);
+        }
+    },
 };

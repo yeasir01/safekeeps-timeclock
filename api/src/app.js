@@ -2,6 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -29,9 +30,10 @@ const MONGO_OPT = {
 //Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(helmet());
 
 //DB Connection
-mongoose.connect(MONGO_URI, MONGO_OPT, (err) => console.log(err));
+mongoose.connect(MONGO_URI, MONGO_OPT, (err) => console.error(err));
 
 // Health check route
 app.get('/healthy', (req, res) => {
