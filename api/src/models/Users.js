@@ -1,26 +1,67 @@
-const mongoose = require('mongoose');
+const {Schema, model} = require('mongoose');
 const { hashPassword } = require('../middleware/password-hash');
 
-var UserSchema = mongoose.Schema({
+const EmployeeSchema = new Schema({
+    first_name: {
+        type: String,
+        required: true,
+    },
+    last_name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: false,
+    },
+    pin: {
+        type: String,
+        required: true,
+        default: '0000',
+        select: false,
+    },
+    start_date: {
+        type: Date,
+        required: false,
+    },
+    end_date: {
+        type: Date,
+        required: false,
+    },
+    employee_id: {
+        type: String,
+        required: false
+    },
+    pay_rate: {
+        type: Object,
+        required: false
+    },
+    group_id: {
+        type: Object,
+        required: false
+    },
+});
+
+const UserSchema = new Schema({
     app_metadata: {
         type: Object,
-        require: false,
+        required: false,
     },
     blocked: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         index: {
             unique: true,
         }
     },
     first_name: {
         type: String,
-        require: true
+        required: true
     },
     last_name: {
         type: String,
@@ -28,46 +69,47 @@ var UserSchema = mongoose.Schema({
     },
     user_metadata: {
         type: Object,
-        require: false,
+        required: false,
     },
     identities: {
         type: Array,
-        require: false
+        required: false
     },
     last_ip: {
         type: String,
-        require: false
+        required: false
     },
     last_login: {
         type: Date,
-        require: false
+        required: false
     },
     phone_number: {
         type: String,
-        require: false
+        required: false
     },
     picture: {
         type: String,
-        require: false
+        required: false
     },
     email_verified: {
         type: Boolean,
         default: false,
-        require: true,
+        required: true,
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         select: false
     },
+    employees: [EmployeeSchema],
     reset_token: {
         type: String,
-        require: false,
-        default: null
+        required: false
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    strict: true
 });
 
 UserSchema.pre('save', hashPassword);
-module.exports = mongoose.model('User', UserSchema);
+module.exports = model('User', UserSchema);

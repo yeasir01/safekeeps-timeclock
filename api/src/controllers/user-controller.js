@@ -14,11 +14,12 @@ module.exports = {
                 });
             }
     
-            await new User(req.body).save();
+            const doc = await new User(req.body).save();
 
             res.status(201).json({
                 success: true, 
-                message: 'Account created'
+                message: 'Account created',
+                id: doc._id,
             });
 
         } catch (err) {
@@ -29,32 +30,33 @@ module.exports = {
         try {
             const { email, password } = req.body;
             const user = await User.findOne({ email }).select('+password');
-            const isPassword = await comparePassword(password, user.password);
-
+            
             if (!user) {
                 return res.status(403).json({
                     success: false, 
                     message: 'Invalid credentials.'
                 });
             }
-
+            
             if (user.blocked) {
                 return res.status(403).json({
                     success: false, 
                     message: 'This account has been blocked, please contact support.'
                 });
             }
-
-            if (!isPassword) {
-                return res.status(403).json({
-                    success: false,
-                    message: 'Invalid credientials.'
+            
+            const isPassword = await comparePassword(password, user.password);
+            
+            if (isPassword) {
+                return res.status(200).json({
+                    success: true,
+                    message: 'Welcome ' + user.first_name
                 });
             }
 
-            return res.status(200).json({
-                success: true,
-                message: 'Welcome ' + user.first_name
+            return res.status(403).json({
+                success: false,
+                message: 'Invalid credientials.'
             });
 
         } catch (err) {
@@ -65,7 +67,6 @@ module.exports = {
         try {
             const { email } = req.body;
             const user = await User.findOne({ email });
-            const expiry = 60 * 60;
             
             if (!user) {
                 return res.status(404).json({
@@ -74,14 +75,15 @@ module.exports = {
                 });
             }
 
-            const token = await serializeUrlToken(40, expiry);
+            const token = await serializeUrlToken();
 
             user.reset_token = token;
-            user.save();
+            await user.save();
 
             return res.status(200).json({
                 success: true, 
-                message: 'Please check your email for the reset link.'
+                message: 'Please check your email for the reset link.',
+                token,
             });
 
         } catch (err) {
