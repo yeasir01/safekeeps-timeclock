@@ -1,9 +1,9 @@
 const crypto = require('crypto');
 
 /**
- * Asynchronously generates cryptographically strong url token.
- * @param {param} expiry Pass TTL value in seconds. If no value is passed, the expiry will default to 3600s. 
- * @param {param} size  The number of bytes to generate. The size must not be larger than 2**31 - 1..
+ * Asynchronously generates cryptographically strong token thats url safe.
+ * @param {number} expiry Pass TTL value in seconds. If no value is passed, the expiry will default to 3600s. 
+ * @param {number} size  The number of bytes to generate. The size must not be larger than 2**31 - 1..
  * If no value is passed, the size will default to 40.
  */
 module.exports.serializeUrlToken = (expiry = 3600, size = 40) => new Promise((resolve, reject) => {
@@ -23,8 +23,8 @@ module.exports.serializeUrlToken = (expiry = 3600, size = 40) => new Promise((re
  * & expiry dates against Date.now() & return a Boolean.
  * 
  * If both checks pass the function will return 'TRUE' otherwise, 'FALSE' will be returned.
- * @param {param} serializedToken Pass token, usually found in the req.body. 
- * @param {param} token  Pass token, usually stored in DB.
+ * @param {string} serializedToken Pass token, usually found in the req.body. 
+ * @param {string} token  Pass token, usually stored in DB.
  */
 module.exports.deSerializeUrlToken = (serializedToken = '', token = '') => {
     const now = Date.now();

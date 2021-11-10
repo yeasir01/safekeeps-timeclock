@@ -1,29 +1,34 @@
 'use strict';
 
 const express = require('express');
-const mongoose = require('mongoose');
 const helmet = require('helmet');
+const passport = require('passport');
+const session = require('express-session');
+const dbConnection = require('./config/db-connection');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+//Import passport strategies
+require('./config/passport')(passport);
+
 //Grab Environment Variables.
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/safeKeeps';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-//Setup Database Options
-const MONGO_OPT = {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
+//Setup Options
+const SESSION_OPT = {
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
 };
 
-//Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+//Initialize Middleware's
 app.use(helmet());
-
-//DB Connection
-mongoose.connect(MONGO_URI, MONGO_OPT, (err) => err && console.error(err));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(session(SESSION_OPT));
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
 
 // Health check route
 app.get('/api/healthy', (req, res) => {
@@ -31,20 +36,29 @@ app.get('/api/healthy', (req, res) => {
 });
 
 //Api Routes
-app.use('/api/v1', require('./routes/v1/user-route.js'));
+app.use('/api/v1', require('./routes/v1/company-route.js'));
 app.use('/api/v1', require('./routes/v1/employee-route.js'));
 
 //404
 app.all('*', (req, res) => {
     res.status(404).json({
         success: false,
-        message: 'No resource found',
+        message: 'Invalid route.',
         url: req.originalUrl
-    }).end();
+    });
 });
 
 //Error Handler
 app.use(require('./middleware/error-handler'));
 
 //Start server
-app.listen(PORT, () => console.log(`API Server running in ${NODE_ENV} mode, listening on ${PORT}.`));
+(async function(){
+    try {
+        await dbConnection();
+        await app.listen(PORT);
+        console.log(`✔️  API Server running in ${NODE_ENV} mode & Listening on ${PORT}.`);
+    } catch (err) {
+        console.error(err);
+        process.exit(1);
+    }
+})();

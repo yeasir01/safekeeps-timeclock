@@ -1,6 +1,6 @@
 const yup = require('yup');
 
-module.exports.createEmployeeSchema = yup.object({
+module.exports.newEmployeeSchema = yup.object({
     body: yup.object({
         first_name: yup.string().min(2).max(55).required(),
         last_name: yup.string().min(2).max(55).required(),

@@ -1,11 +1,11 @@
-const User = require('../models/Users');
+const User = require('../models/company-dao');
 
 module.exports = {
     createOne: async (req, res, next) => {
         try {
 
             const FILTER = {
-                '_id': req.params._id,
+                '_id': req.user._id,
             };
 
             const UPDATE = {
@@ -38,8 +38,8 @@ module.exports = {
         try {
 
             const FILTER = {
-                '_id': req.params._id,
-                'employees._id': req.body._id,
+                '_id': req.user._id,
+                'employees._id': req.params._id,
             };
 
             const UPDATE = {
@@ -63,11 +63,11 @@ module.exports = {
             const doc = await User.findOneAndUpdate(FILTER, UPDATE, OPTIONS);
 
             if (doc) {
-                const index = doc.employees.findIndex((x) => x._id == req.body._id);
+                const idx = doc.employees.findIndex((x) => x._id == req.body._id);
 
                 return res.status(201).json({
                     success: true,
-                    data: doc.employees[index],
+                    data: doc.employees[idx],
                 });
             }
 
@@ -81,7 +81,7 @@ module.exports = {
         try {
 
             const QUERY = {
-                '_id': '618250217dc745f82c21bc2e', //get from req.user
+                '_id': req.user._id,
                 'users.employees': req.params._id
             };
 
@@ -106,13 +106,13 @@ module.exports = {
         try {
 
             const FILTER = {
-                '_id': req.params._id
+                '_id': req.user._id
             };
 
             const UPDATE = {
                 '$pull': {
                     'employees': {
-                        '_id': req.body._id //change this to params and change userID to user.req
+                        '_id': req.params._id
                     }
                 }
             };

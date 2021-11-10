@@ -1,48 +1,7 @@
-const {Schema, model} = require('mongoose');
-const { hashPassword } = require('../middleware/password-hash');
+const { Schema, model } = require('mongoose');
+const { hashPassword } = require('../middleware/hash-password');
 
-const EmployeeSchema = new Schema({
-    first_name: {
-        type: String,
-        required: true,
-    },
-    last_name: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: false,
-    },
-    pin: {
-        type: String,
-        required: true,
-        default: '0000',
-        select: false,
-    },
-    start_date: {
-        type: Date,
-        required: false,
-    },
-    end_date: {
-        type: Date,
-        required: false,
-    },
-    employee_id: {
-        type: String,
-        required: false
-    },
-    pay_rate: {
-        type: Object,
-        required: false
-    },
-    group_id: {
-        type: Object,
-        required: false
-    },
-});
-
-const UserSchema = new Schema({
+const CompanySchema = new Schema({
     app_metadata: {
         type: Object,
         required: false,
@@ -51,6 +10,10 @@ const UserSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    company_name: {
+        type: String,
+        required: true,
     },
     email: {
         type: String,
@@ -101,7 +64,6 @@ const UserSchema = new Schema({
         required: true,
         select: false
     },
-    employees: [EmployeeSchema],
     reset_token: {
         type: String,
         required: false
@@ -111,5 +73,5 @@ const UserSchema = new Schema({
     strict: true
 });
 
-UserSchema.pre('save', hashPassword);
-module.exports = model('User', UserSchema);
+CompanySchema.pre('save', hashPassword);
+module.exports = model('Company', CompanySchema);
