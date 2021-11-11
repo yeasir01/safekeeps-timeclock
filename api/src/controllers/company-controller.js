@@ -78,7 +78,7 @@ module.exports = {
     },
     getProfile: async (req, res, next) => {
         try {
-            const userData = await findOneCompany({_id: req.user._id}, ['first_name', 'last_name']);
+            const userData = await findOneCompany({_id: req.user._id}, ['first_name', 'last_name', 'company_name']);
 
             return res.status(200).json({
                 success: true,

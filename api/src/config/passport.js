@@ -19,8 +19,8 @@ module.exports = (passport) => {
     passport.use(new LocalStrategy(LOCAL_OPT, async (email, password, done) => {
       try {
         const user = await findOneCompany({email}, SELECT);
-        if (!user) { return done({message: 'Invalid Login Credentials.'}, false); }
-        if (!await verifyPassword(password, user.password)) { return done({message: 'Invalid Login Credentials.'}, false); }
+        if (!user) { return done({message: 'Invalid login credentials.'}, false); }
+        if (!await verifyPassword(password, user.password)) { return done({message: 'Invalid login credentials.'}, false); }
         if (user.blocked) { return done({message: 'This account has been blocked.'}, false); }
         user.password = undefined;
         user.blocked = undefined;

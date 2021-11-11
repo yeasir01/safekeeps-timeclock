@@ -1,32 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 
-export default function DigitalClock({ classes = "", includeDate = false }) {
+function DigitalClock(props) {
+    const [state, setState] = useState(setIntialState);
 
-    const [state, setState] = useState({
-        time: format(Date.now(), "h:mm aaa"), 
-        date: format(Date.now(), "MMMM dd, yyyy"),
-    });
+    function setIntialState(){
+        const now = Date.now();
+
+        if (props.includeDate){
+            return {
+                time: format(now, props.timeFormat), 
+                date: format(now, props.dateFormat),
+            }
+        }
+
+        return {time: format(now, props.timeFormat)}
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
             const now = Date.now();
 
-            if (includeDate) {
+            if (props.includeDate) {
                 return setState({
-                    date: format(now, "MMMM dd, yyyy"),
-                    time: format(now, "h:mm aaa"),
+                    date: format(now, props.dateFormat),
+                    time: format(now, props.timeFormat),
                 })
-            } else {
-                return setState({
-                    time: format(now, "h:mm aaa")
-                });
             }
 
+            return setState({
+                time: format(now, props.timeFormat)
+            });
+            
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [includeDate]);
+    }, [props.includeDate, props.timeFormat, props.dateFormat]);
 
     const WDate = () => (
         <React.Fragment>
@@ -40,8 +49,17 @@ export default function DigitalClock({ classes = "", includeDate = false }) {
     );
 
     return (
-        <div className={classes}>
-            {includeDate ? <WDate /> : <NoDate />}
+        <div className={props.styles}>
+            {props.includeDate ? <WDate /> : <NoDate />}
         </div>
-    )
-}
+    );
+};
+
+DigitalClock.defaultProps = {
+    styles: "",
+    includeDate: false,
+    dateFormat: "MMMM dd, yyyy",
+    timeFormat: "h:mm aaa",
+};
+
+export default DigitalClock;
