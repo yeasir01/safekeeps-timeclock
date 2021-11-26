@@ -1,44 +1,46 @@
 const LocalStrategy = require('passport-local');
-const { verifyPassword } = require('../helpers/verify-password');
-const { findOneCompany } = require('../models/company-dao');
+const { comparePassword } = require('../helpers/compare-password');
+const Account = require('../models/Account');
 
-const LOCAL_OPT = {
-    usernameField: 'email',
-    passwordField: 'password',
+const LS_OPTS = {
+  usernameField: 'email',
+  passwordField: 'password',
 };
 
-const SELECT = [
+const INCLUDE = [
   '_id',
   'first_name',
+  'last_name',
   'email',
   'password',
   'blocked',
+  'last_login',
 ];
 
 module.exports = (passport) => {
-    passport.use(new LocalStrategy(LOCAL_OPT, async (email, password, done) => {
-      try {
-        const user = await findOneCompany({email}, SELECT);
-        if (!user) { return done({message: 'Invalid login credentials.'}, false); }
-        if (!await verifyPassword(password, user.password)) { return done({message: 'Invalid login credentials.'}, false); }
-        if (user.blocked) { return done({message: 'This account has been blocked.'}, false); }
-        user.password = undefined;
-        user.blocked = undefined;
-        return done(null, user);
-      } catch (err) {
-        done(err);
-      }
-    }));
+  passport.use(new LocalStrategy(LS_OPTS, async (email, password, done) => {
+    try {
+      const user = await Account.findOne({ email }, INCLUDE).exec();
+      if (!user) { return done({ message: 'Invalid login credentials.' }, false); }
+      if (!await comparePassword(password, user.password)) { return done({ message: 'Invalid login credentials.' }, false); }
+      if (user.blocked) { return done({ message: 'This account has been blocked.' }, false); }
+      user.last_login = Date.now();
+      await user.save();
+      return done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  }));
 
-    passport.serializeUser(function(user, cb) {
-      process.nextTick(function() {
-        cb(null, { _id: user._id, email: user.email });
-      });
+  passport.serializeUser(function (user, cb) {
+    process.nextTick(function () {
+      cb(null, { _id: user._id, email: user.email });
     });
-  
-    passport.deserializeUser(function(user, cb) {
-      process.nextTick(function() {
-        return cb(null, user);
-      });
+  });
+
+  passport.deserializeUser(function (user, cb) {
+    process.nextTick(function () {
+      return cb(null, user);
     });
+  });
 };

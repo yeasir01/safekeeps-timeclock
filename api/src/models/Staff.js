@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const EmployeeSchema = new Schema({
+const StaffSchema = new Schema({
     first_name: {
         type: String,
         required: true,
@@ -35,10 +35,18 @@ const EmployeeSchema = new Schema({
         type: Object,
         required: false
     },
-    group_id: {
-        type: Object,
-        required: false
+    active: {
+        type: Boolean,
+        required: true,
+        default: true,
     },
+    last_login: {
+        type: Date,
+        required: false,
+    }
+}, {
+    timestamps: true,
+    strict: true
 });
 
-module.exports = model('Employee', EmployeeSchema);
+module.exports = model('Staff', StaffSchema);

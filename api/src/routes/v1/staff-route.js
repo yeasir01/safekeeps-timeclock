@@ -1,31 +1,32 @@
 const express = require('express');
 const router = express.Router();
-const employeeController = require('../../controllers/employee-controller');
-const validate = require('../../middleware/schema-validator');
-const { newEmployeeSchema } = require('../../validators/employee-schema');
+const staffController = require('../../controllers/staff-controller');
+//const validate = require('../../middleware/schema-validator');
+//const { newEmployeeSchema } = require('../../validators/employee-schema');
+const isAuthorized = require('../../middleware/auth-check').isAuthorized;
 
-router.route('/employee/create/:_id')
+router.route('/employee/create')
     // @route  POST api/v1/employee/create
     // @desc   POST employee info in req.body
     // @access Private
-    .post(validate(newEmployeeSchema), employeeController.createOne);
+    .post(isAuthorized, staffController.createOne);
 
 router.route('/employee/update/:_id')
     // @route  PUT api/v1/employee/update
     // @desc   PUT employee info in req.body
     // @access Private
-    .put(employeeController.updateOne);
+    .put(isAuthorized, staffController.updateOne);
 
 router.route('/employee/delete/:_id')
     // @route  PUT api/v1/employee/update
     // @desc   PUT employee info in req.body
     // @access Private
-    .delete(employeeController.deleteOne);
+    .delete(isAuthorized, staffController.deleteOne);
 
 router.route('/employee/get-one/:_id')
     // @route  PUT api/v1/employee/update
     // @desc   PUT employee info in req.body
     // @access Private
-    .get(employeeController.getOne);
+    .get(isAuthorized, staffController.getOne);
 
 module.exports = router;

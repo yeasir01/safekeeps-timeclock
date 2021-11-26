@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { format } from 'date-fns';
 
 function DigitalClock(props) {
@@ -38,28 +40,32 @@ function DigitalClock(props) {
     }, [props.includeDate, props.timeFormat, props.dateFormat]);
 
     const WDate = () => (
-        <React.Fragment>
-            <div className="date">{state.date}</div>
-            <div className="clock">{state.time}</div>
-        </React.Fragment>
+        <Box component="div" sx={{...props.sx}}>
+            <Typography variant="h5">
+                {state.date}
+            </ Typography>
+            <Typography variant="h2">
+                {state.time}
+            </ Typography>
+        </Box>
     );
 
     const NoDate = () => (
-        <div className="clock">{state.time}</div>
+        <Box component="div" sx={{...props.sx}}>
+            <Typography variant="h1">
+                {state.time}
+            </Typography>
+        </Box>
     );
 
-    return (
-        <div className={props.styles}>
-            {props.includeDate ? <WDate /> : <NoDate />}
-        </div>
-    );
+    return props.includeDate ? <WDate /> : <NoDate />;
 };
 
 DigitalClock.defaultProps = {
     styles: "",
     includeDate: false,
-    dateFormat: "MMMM dd, yyyy",
+    dateFormat: "EEEE, MMMM dd, yyyy",
     timeFormat: "h:mm aaa",
 };
 
-export default DigitalClock;
+export default memo(DigitalClock);

@@ -36,8 +36,8 @@ app.get('/api/healthy', (req, res) => {
 });
 
 //Api Routes
-app.use('/api/v1', require('./routes/v1/company-route.js'));
-app.use('/api/v1', require('./routes/v1/employee-route.js'));
+app.use('/api/v1', require('./routes/v1/account-route.js'));
+//app.use('/api/v1', require('./routes/v1/staff-route.js'));
 
 //404
 app.all('*', (req, res) => {
@@ -55,7 +55,7 @@ app.use(require('./middleware/error-handler'));
 (async function(){
     try {
         await dbConnection();
-        await app.listen(PORT);
+        app.listen(PORT);
         console.log(`✔️  API Server running in ${NODE_ENV} mode & Listening on ${PORT}.`);
     } catch (err) {
         console.error(err);

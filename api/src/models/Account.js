@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const { hashPassword } = require('../middleware/hash-password');
 
-const CompanySchema = new Schema({
+const AccountSchema = new Schema({
     app_metadata: {
         type: Object,
         required: false,
@@ -9,7 +9,8 @@ const CompanySchema = new Schema({
     blocked: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
+        select: false,
     },
     company_name: {
         type: String,
@@ -33,18 +34,22 @@ const CompanySchema = new Schema({
     user_metadata: {
         type: Object,
         required: false,
+        select: false,
     },
     identities: {
         type: Array,
-        required: false
+        required: false,
+        select: false,
     },
     last_ip: {
         type: String,
-        required: false
+        required: false,
+        select: false,
     },
     last_login: {
         type: Date,
-        required: false
+        required: false,
+        select: false,
     },
     phone_number: {
         type: String,
@@ -58,20 +63,22 @@ const CompanySchema = new Schema({
         type: Boolean,
         default: false,
         required: true,
+        select: false,
     },
     password: {
         type: String,
         required: true,
-        select: false
+        select: false,
     },
     reset_token: {
         type: String,
-        required: false
+        required: false,
+        select: false,
     }
 }, {
     timestamps: true,
     strict: true
 });
 
-CompanySchema.pre('save', hashPassword);
-module.exports = model('Company', CompanySchema);
+AccountSchema.pre('save', hashPassword);
+module.exports = model('Account', AccountSchema);

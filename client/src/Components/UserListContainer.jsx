@@ -13,7 +13,11 @@ export default function UserListContainer() {
 
     React.useEffect(()=>{
         setUsers(sampledata)
-        SetIsLoading(false)
+        const time = setTimeout(()=>{
+            SetIsLoading(false)
+        }, 400)
+
+        return () => clearTimeout(time);
     },[]);
 
     React.useEffect(()=>{
@@ -33,11 +37,11 @@ export default function UserListContainer() {
     if (isLoading) {return <Spinner />}
 
     return (
-        <div>
+        <Box component='div'>
             <Box>
                 <Search state={search} handleChange={updateSearch}/>
             </Box>
             <UserList list={renderList}/>
-        </div>
+        </Box>
     )
 };
