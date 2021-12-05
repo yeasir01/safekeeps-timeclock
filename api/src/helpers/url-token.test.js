@@ -1,29 +1,29 @@
-const { serializeUrlToken } = require('./url-token');
+const { serializedUrlToken } = require('./url-token');
 
 describe('Serialize Token Function', () => {
     
     it('should return a string token', async () => {
-        const token = await serializeUrlToken();
-        expect(typeof token).toBe('string');
+        expect.assertions(1);
+        const token = await serializedUrlToken();
+        return expect(typeof(token)).toBe('string');
     });
     
     it('should contain a date', async () => {
-        const token = await serializeUrlToken();
+        expect.assertions(1);
+        const token = await serializedUrlToken();
         const date = token.split('.')[1];
-        expect(date).toBeTruthy();
+        return expect(date).toBeTruthy();
     });
 
     it('should contain an 80 char string with no params passed', async () => {
-        const token = await serializeUrlToken();
-        const tknLength = token.split('.')[0].length;
-        expect(tknLength).toBe(80);
+        expect.assertions(1);
+        const token = await serializedUrlToken();
+        const tokenLength = token.split('.')[0].length;
+        return expect(tokenLength).toBe(80);
     });
 
     it('should throw a TypeError if a string is passed', async () => {
-        try {
-            await serializeUrlToken('test');
-        } catch (err) {
-            expect(err).toThrow(TypeError);
-        }
+        expect.assertions(1);
+        await expect(serializedUrlToken('bad', 'string')).rejects.toThrow(TypeError);
     });
 });

@@ -1,5 +1,5 @@
 const Account = require('../models/Account');
-const { serializeUrlToken } = require('../helpers/url-token');
+const { serializedUrlToken } = require('../helpers/url-token');
 
 module.exports = {
     register: async (req, res, next) => {
@@ -42,7 +42,7 @@ module.exports = {
                 });
             }
 
-            const token = await serializeUrlToken(7200, 40);
+            const token = await serializedUrlToken(7200, 40);
 
             account.reset_token = token;
             await account.save();

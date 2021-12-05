@@ -6,7 +6,15 @@ const crypto = require('crypto');
  * @param {number} size  The number of bytes to generate. The size must not be larger than 2**31 - 1..
  * If no value is passed, the size will default to 40.
  */
-module.exports.serializeUrlToken = (expiry = 3600, size = 40) => new Promise((resolve, reject) => {
+module.exports.serializedUrlToken = (expiry = 3600, size = 40) => new Promise((resolve, reject) => {
+    if (isNaN(expiry)) {
+        return reject(new TypeError('expiry must be a type of number'));
+    }
+
+    if (isNaN(size)) {
+        return reject(new TypeError('size must be a type of number'));
+    }
+
     crypto.randomBytes(size, (err, buf) => {
         if (err) return reject(err);
 

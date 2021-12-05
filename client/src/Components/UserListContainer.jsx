@@ -15,7 +15,7 @@ export default function UserListContainer() {
         setUsers(sampledata)
         const time = setTimeout(()=>{
             SetIsLoading(false)
-        }, 400)
+        }, 600)
 
         return () => clearTimeout(time);
     },[]);

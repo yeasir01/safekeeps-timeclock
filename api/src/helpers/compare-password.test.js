@@ -1,12 +1,12 @@
 const { comparePassword } = require('./compare-password');
 const bcrypt = require('bcryptjs');
 
-const genHash = (password) => new Promise((resolve, reject)=>{
+const genHash = (password) => new Promise((resolve, reject) => {
     bcrypt.genSalt(10, function (err, salt) {
-        if (err) {reject(err);}
+        if (err) { reject(err); }
 
         bcrypt.hash(password, salt, function (err, hash) {
-            if (err) {reject(err);}
+            if (err) { reject(err); }
             resolve(hash);
         });
     });
@@ -14,25 +14,28 @@ const genHash = (password) => new Promise((resolve, reject)=>{
 
 describe('Compare Password Function', () => {
 
+    const password = '1strongPassword$';
+
     it('should fail password comparison when matching exact strings', async () => {
-        const password = '1strongPassword$';
+        expect.assertions(1);
         const isMatch = await comparePassword(password, password);
-        expect(isMatch).toBeFalsy();
+        return expect(isMatch).toBeFalsy();
     });
 
-    it('should pass when matching to a hash', async () => {
-        const password = '1strongPassword$';
+    it('should pass when matching password to hash', async () => {
+        expect.assertions(1);
         const hash = await genHash(password);
         const isMatch = await comparePassword(password, hash);
-        expect(isMatch).toBeTruthy();
+        return expect(isMatch).toBeTruthy();
     });
 
-    it('should throw an error when illegal args are passed 1', async () => {
-        try {
-            await comparePassword(null, null);
-        } catch (err) {
-            expect(err.message).toEqual('Illegal arguments: object, object');
-        }
+    it('should throw an error when illegal args are passed', async () => {
+        expect.assertions(1);
+        await expect(comparePassword(null, null)).rejects.toThrow();
     });
 
+    it('should throw an error when no args passed', async () => {
+        expect.assertions(1);
+        await expect(comparePassword()).rejects.toThrow();
+    });
 });
