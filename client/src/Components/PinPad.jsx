@@ -4,11 +4,8 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Zoom from '@mui/material/Zoom';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import CircleIcon from '@mui/icons-material/Circle';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import BackspaceIcon from '@mui/icons-material/Backspace';
 
 const RoundButton = styled(Button)(({ theme }) => ({
@@ -17,35 +14,34 @@ const RoundButton = styled(Button)(({ theme }) => ({
     borderRadius: '50%',
     margin: theme.spacing(1),
     padding: theme.spacing(1),
-    '&::after': {
-        content: '""',
-        display: 'block',
-        paddingBottom: '100%',
+}));
+
+const DotIndicator = styled(Box)(({ theme }) => ({
+    border: 'thin solid ' + theme.palette.grey[400],
+    borderRadius: '50%',
+    width: '18px',
+    height: '18px',
+    transition: theme.transitions.easing.easeInOut + ' 300ms',
+    '&.active': {
+        background: theme.palette.primary.main,
     },
 }));
 
-const PinInputUi = ({max, input}) => (
+const PinInputIndicator = ({max, input}) => (
     [...new Array(max)].map((_, idx) => {
-        const isSelected = input.length >= idx + 1;
+        const classes = input.length >= idx + 1 ? 'active' : '';
 
-        return (
-            <Box key={idx}>
-                { isSelected ? 
-                    <Zoom in><CircleIcon fontSize='medium' color='primary'/></ Zoom> : 
-                    <CircleOutlinedIcon fontSize='small' color='disabled'/>
-                }
-            </Box>
-        )
+        return <DotIndicator key={idx} className={classes}/>;
     })
 );
 
-export default function PinPad({ width, fontSize, maxLength }) {
+export default function PinPad({ size, font, maxPinLength }) {
 
     const [pin, setPin] = React.useState('');
     const [message, setMessage] = React.useState('Enter Pin');
 
     const handleSelect = (event) => {
-        if (pin.length === maxLength) return;
+        if (pin.length === maxPinLength) return;
         setPin(prev => prev + event.target.value);
     };
 
@@ -60,7 +56,7 @@ export default function PinPad({ width, fontSize, maxLength }) {
     };
 
     React.useEffect(() => {
-        if (pin.length < maxLength) {
+        if (pin.length < maxPinLength) {
             return;
         }
 
@@ -70,41 +66,41 @@ export default function PinPad({ width, fontSize, maxLength }) {
         }
 
         setMessage('Welcome User!');
-    }, [pin, maxLength]);
+    }, [pin, maxPinLength]);
 
     return (
         <Paper elevation={4} sx={{ width: 'fit-content', padding: '1rem', margin:'auto' }}>
             <Stack direction="row">
                 <Container>         
-                    <Typography variant='h5' align='center'>
+                    <Typography variant='h5' align='center' fontSize={font}>
                         {message}
                     </ Typography>
                 </ Container>
             </Stack>
             <Stack direction="row">
-                <Container sx={{height: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <PinInputUi max={maxLength} input={pin}/>
+                <Container sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginY: '1rem'}}>
+                    <PinInputIndicator max={maxPinLength} input={pin}/>
                 </ Container>
             </Stack>
             <Stack direction="row">
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={1}>1</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={2}>2</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={3}>3</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={1}>1</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={2}>2</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={3}>3</RoundButton>
             </Stack>
             <Stack direction="row">
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={4}>4</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={5}>5</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={6}>6</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={4}>4</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={5}>5</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={6}>6</RoundButton>
             </Stack>
             <Stack direction="row">
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={7}>7</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={8}>8</RoundButton>
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={9}>9</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={7}>7</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={8}>8</RoundButton>
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={9}>9</RoundButton>
             </Stack>
             <Stack direction="row">
-                <RoundButton onClick={handleClear} sx={{ width, fontSize, border: 'none' }} />
-                <RoundButton onClick={handleSelect} sx={{ width, fontSize }} value={0}>0</RoundButton>
-                <RoundButton onClick={handleDelete} sx={{ width, fontSize, border: 'none' }}>
+                <RoundButton onClick={handleClear} sx={{ height: size, width: size, fontSize: font, border: 'none' }} />
+                <RoundButton onClick={handleSelect} sx={{ height: size, width: size, fontSize: font }} value={0}>0</RoundButton>
+                <RoundButton onClick={handleDelete} sx={{ height: size, width: size, fontSize: font, border: 'none' }}>
                     <BackspaceIcon fontSize='large' />
                 </RoundButton>
             </Stack>
@@ -113,7 +109,7 @@ export default function PinPad({ width, fontSize, maxLength }) {
 };
 
 PinPad.defaultProps = {
-    width: '80px',
-    fontSize: '24px',
-    maxLength: 4,
+    size: 80,
+    font: 24,
+    maxPinLength: 4,
 };
